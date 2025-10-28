@@ -102,6 +102,7 @@ export default function Questionnaire() {
                     value={opt}
                     checked={form.awareness_content.includes(opt)}
                     onChange={handleChange}
+                    required
                   />{" "}
                   {opt}
                 </label>
@@ -123,7 +124,8 @@ export default function Questionnaire() {
             value={form.experience}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
-          />
+            placeholder="your experience "
+           required   />
         </div>
 
         {/* 3. Breach experience */}
@@ -138,6 +140,7 @@ export default function Questionnaire() {
             name="breach_experience"
             value={form.breach_experience}
             onChange={handleChange}
+                required
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
           />
         </div>
@@ -155,6 +158,7 @@ export default function Questionnaire() {
             name="biggest_threat"
             value={form.biggest_threat}
             onChange={handleChange}
+            required
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
           />
         </div>
@@ -172,6 +176,7 @@ export default function Questionnaire() {
             value={form.reported_incident}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+            required
           >
             <option value="">Select</option>
             <option value="Yes">Yes</option>
@@ -192,7 +197,7 @@ export default function Questionnaire() {
             value={form.mfa_used}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
-          >
+             required >
             <option value="">Select</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
@@ -212,6 +217,7 @@ export default function Questionnaire() {
             value={form.personal_device_access}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+            required
           >
             <option value="">Select</option>
             <option value="Yes">Yes</option>
@@ -232,6 +238,7 @@ export default function Questionnaire() {
             value={form.email_reaction}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+            required
           />
         </div>
 
@@ -248,6 +255,7 @@ export default function Questionnaire() {
             value={form.verify_financial_request}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+            required
           />
         </div>
 
@@ -263,6 +271,7 @@ export default function Questionnaire() {
             value={form.review_frequency}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+                required
           >
             <option value="Never">Never</option>
             <option value="Once a year">Once a year</option>
