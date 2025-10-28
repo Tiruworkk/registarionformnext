@@ -65,6 +65,12 @@ export default function Questionnaire() {
     <div
       style={{
        backgroundImage: "url(/images/background.jpg)",
+       backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        minHeight: "100vh",
+        padding: "40px",
         minHeight: "100vh",
         padding: "40px 0",
       }}
