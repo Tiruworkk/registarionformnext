@@ -64,15 +64,14 @@ export default function Questionnaire() {
   return (
     <div
       style={{
-       backgroundImage: "url(/images/background.jpg)",
-       backgroundRepeat: "no-repeat",
-        backgroundPosition: "center center",
+       minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: "url(/images/background.jpg)",
         backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-        minHeight: "100vh",
-        padding: "40px",
-        minHeight: "100vh",
-        padding: "40px 0",
+        backgroundPosition: "center",
+        padding: "20px",
       }}
     >
       <form
