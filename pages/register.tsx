@@ -107,6 +107,7 @@ export default function Register() {
             value={form.job_title}
             onChange={handleChange}
             required
+            placeholder="Role"
             style={{
               width: "100%",
               padding: "12px",
@@ -114,6 +115,7 @@ export default function Register() {
               borderRadius: "8px",
               border: "2px solid #F0B923",
               fontSize: "1rem",
+             
             }}
           >
             <option>Chief</option>
