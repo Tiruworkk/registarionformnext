@@ -1,33 +1,25 @@
 import { MongoClient } from "mongodb";
- 
-const uri = process.env.MONGODB_URI;
 
-if (!uri) {
-  console.warn("MONGODB_URI is not set. Database operations will fail until it is configured.");
-}
+const uri = process.env.MONGODB_URI!;
+const options = {};
 
-let client: MongoClient; 
+let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-declare global {
-  // Allow a global variable in development to preserve the client across module reloads
-  // eslint-disable-next-line no-var
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please add your Mongo URI to .env.local");
 }
 
-if (!uri) {
-  clientPromise = Promise.reject(new Error("MONGODB_URI not configured"));
-} else {
-  client = new MongoClient(uri);
-
-  if (process.env.NODE_ENV === "development") {
-    if (!global._mongoClientPromise) {
-      global._mongoClientPromise = client.connect();
-    }
-    clientPromise = global._mongoClientPromise;
-  } else {
-    clientPromise = client.connect();
+if (process.env.NODE_ENV === "development") {
+  // In dev, use a global variable to prevent multiple connections
+  if (!(global as any)._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    (global as any)._mongoClientPromise = client.connect();
   }
+  clientPromise = (global as any)._mongoClientPromise;
+} else {
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
 }
 
 export default clientPromise;
