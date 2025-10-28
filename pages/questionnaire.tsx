@@ -102,7 +102,8 @@ export default function Questionnaire() {
                     value={opt}
                     checked={form.awareness_content.includes(opt)}
                     onChange={handleChange}
-                    required
+                   required={index === 0 && form.awareness_content.length === 0} 
+                    
                   />{" "}
                   {opt}
                 </label>
