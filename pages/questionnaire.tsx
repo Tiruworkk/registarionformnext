@@ -11,7 +11,7 @@ interface QuestionnaireData {
   email_reaction: string;
   verify_financial_request: string;
   review_frequency: string;
-}
+} 
 
 export default function Questionnaire() {
   const [form, setForm] = useState<QuestionnaireData>({
