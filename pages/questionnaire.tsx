@@ -75,7 +75,7 @@ export default function Questionnaire() {
           maxWidth: 600,
           margin: "0 auto",
           padding: "20px",
-          backgroundColor: "#ffffff", // white form background
+          backgroundColor: "#F0B923", // white form background
           borderRadius: "10px",
           boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
         }}
