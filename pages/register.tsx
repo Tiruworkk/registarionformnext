@@ -26,6 +26,7 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
     if (form.password !== form.retypePassword) {
       alert("Passwords do not match");
       return;
@@ -37,6 +38,7 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+
       const data = await res.json();
       if (res.ok) {
         alert(data.message);
@@ -86,9 +88,10 @@ export default function Register() {
           <input
             type="text"
             name="name"
-            placeholder="John Doe"
+            placeholder="Full Name"
             value={form.name}
             onChange={handleChange}
+            required
             style={{
               width: "100%",
               padding: "12px",
@@ -103,6 +106,7 @@ export default function Register() {
             name="job_title"
             value={form.job_title}
             onChange={handleChange}
+            required
             style={{
               width: "100%",
               padding: "12px",
@@ -125,6 +129,7 @@ export default function Register() {
             placeholder="test@gmail.com"
             value={form.email}
             onChange={handleChange}
+            required
             style={{
               width: "100%",
               padding: "12px",
@@ -140,6 +145,7 @@ export default function Register() {
             placeholder="Enter your password"
             value={form.password}
             onChange={handleChange}
+            required
             style={{
               width: "100%",
               padding: "12px",
@@ -155,6 +161,7 @@ export default function Register() {
             placeholder="Retype your password"
             value={form.retypePassword}
             onChange={handleChange}
+            required
             style={{
               width: "100%",
               padding: "12px",
@@ -178,8 +185,8 @@ export default function Register() {
               cursor: "pointer",
               transition: "0.3s",
             }}
-            onMouseOver={(e) => ((e.currentTarget.style.backgroundColor = "#e6aa1f"))}
-            onMouseOut={(e) => ((e.currentTarget.style.backgroundColor = "#F0B923"))}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e6aa1f")}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#F0B923")}
           >
             Register
           </button>
