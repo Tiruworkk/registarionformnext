@@ -14,7 +14,7 @@ export default function Register() {
   const router = useRouter();
   const [form, setForm] = useState<FormData>({
     name: "",
-    job_title: "Chief",
+    job_title: "",
     email: "",
     password: "",
     retypePassword: "",
@@ -42,6 +42,10 @@ export default function Register() {
       const data = await res.json();
       if (res.ok) {
         alert(data.message);
+
+        // ✅ Save a flag so the questionnaire page knows this user registered
+        localStorage.setItem("registered", "true");
+
         router.push("/questionnaire");
       } else {
         alert(data.message);
@@ -59,7 +63,7 @@ export default function Register() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundImage: "url(/images/background.jpg)",
+        backgroundImage: "url('/images/background.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         padding: "20px",
@@ -80,7 +84,7 @@ export default function Register() {
           <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
         </div>
 
-        <h2 style={{ textAlign: "center", marginBottom: "30px", color: "#603C1C", fontWeight: "700", fontSize: "1.8rem" }}>
+        <h2 style={{ textAlign: "center", color: "#603C1C" }}>
           Registration Form
         </h2>
 
@@ -98,10 +102,9 @@ export default function Register() {
               marginBottom: "15px",
               borderRadius: "8px",
               border: "2px solid #F0B923",
-              outline: "none",
-              fontSize: "1rem",
             }}
           />
+
           <select
             name="job_title"
             value={form.job_title}
@@ -113,11 +116,11 @@ export default function Register() {
               marginBottom: "15px",
               borderRadius: "8px",
               border: "2px solid #F0B923",
-              fontSize: "1rem",
-             
             }}
           >
-        <option value="" disabled hidden>Select Role </option>
+            <option value="" disabled hidden>
+              Select Role
+            </option>
             <option>Chief</option>
             <option>CEO</option>
             <option>CIO</option>
@@ -126,6 +129,7 @@ export default function Register() {
             <option>Executive</option>
             <option>Division</option>
           </select>
+
           <input
             type="email"
             name="email"
@@ -139,9 +143,9 @@ export default function Register() {
               marginBottom: "15px",
               borderRadius: "8px",
               border: "2px solid #F0B923",
-              fontSize: "1rem",
             }}
           />
+
           <input
             type="password"
             name="password"
@@ -155,9 +159,9 @@ export default function Register() {
               marginBottom: "15px",
               borderRadius: "8px",
               border: "2px solid #F0B923",
-              fontSize: "1rem",
             }}
           />
+
           <input
             type="password"
             name="retypePassword"
@@ -171,9 +175,9 @@ export default function Register() {
               marginBottom: "25px",
               borderRadius: "8px",
               border: "2px solid #F0B923",
-              fontSize: "1rem",
             }}
           />
+
           <button
             type="submit"
             style={{
@@ -182,14 +186,10 @@ export default function Register() {
               backgroundColor: "#F0B923",
               color: "#603C1C",
               fontWeight: "700",
-              fontSize: "1.1rem",
               border: "none",
               borderRadius: "10px",
               cursor: "pointer",
-              transition: "0.3s",
             }}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e6aa1f")}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#F0B923")}
           >
             Register
           </button>
