@@ -1,200 +1,62 @@
-import { useState, ChangeEvent, FormEvent } from "react";
-import { useRouter } from "next/router";
-import Image from "next/image";
+import { useState } from "react";
 
-interface FormData {
-  name: string;
-  job_title: string;
-  email: string;
-  password: string;
-  retypePassword: string;
-}
+export default function ReportPage() {
+  const [loading, setLoading] = useState(false);
 
-export default function Register() {
-  const router = useRouter();
-  const [form, setForm] = useState<FormData>({
-    name: "",
-    job_title: "",
-    email: "",
-    password: "",
-    retypePassword: "",
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (form.password !== form.retypePassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
+  const downloadAllUsers = async () => {
+    setLoading(true);
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch("/api/downloadAll");
+      if (!res.ok) throw new Error("Failed to fetch data");
 
-      const data = await res.json();
-      if (res.ok) {
-        alert(data.message);
-
-        // ✅ Save a flag so the questionnaire page knows this user registered
-        localStorage.setItem("registered", "true");
-
-        router.push("/questionnaire");
-      } else {
-        alert(data.message);
-      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "all_users_report.json";
+      a.click();
+      window.URL.revokeObjectURL(url);
     } catch (err) {
+      alert("Failed to download report");
       console.error(err);
-      alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Make sure this `return` is inside the function!
   return (
     <div
       style={{
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundImage: "url('/images/background.jpg')",
+        backgroundImage: "url('/images/download.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         padding: "20px",
       }}
     >
-      <div
+      <h1 style={{ color: "#603C1C", marginBottom: "20px" }}>
+        Download All Users Report
+      </h1>
+      <button
+        onClick={downloadAllUsers}
+        disabled={loading}
         style={{
-          maxWidth: 500,
-          width: "100%",
-          padding: "40px",
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-          borderRadius: "15px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-          borderTop: "5px solid #F0B923",
+          padding: "12px 25px",
+          fontSize: "1rem",
+          backgroundColor: "rgba(240, 185, 35, 1)",
+          color: "#603C1C",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: "25px" }}>
-        <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
-        </div>
-
-        <h2 style={{ textAlign: "center", color: "#603C1C" }}>
-          Registration Form
-        </h2>
-
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <select
-            name="job_title"
-            value={form.job_title}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          >
-            <option value="" disabled hidden>
-              Select Role
-            </option>
-            <option>Chief</option>
-            <option>CEO</option>
-            <option>CIO</option>
-            <option>Deputy Chief</option>
-            <option>Director</option>
-            <option>Executive</option>
-            <option>Division</option>
-          </select>
-
-          <input
-            type="email"
-            name="email"
-            placeholder="test@gmail.com"
-            value={form.email}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <input
-            type="password"
-            name="retypePassword"
-            placeholder="Retype your password"
-            value={form.retypePassword}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "25px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "14px",
-              backgroundColor: "#F0B923",
-              color: "#603C1C",
-              fontWeight: "700",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-            }}
-          >
-            Register
-          </button>
-        </form>
-      </div>
+        {loading ? "Downloading..." : "Download Report"}
+      </button>
     </div>
   );
 }
