@@ -64,7 +64,7 @@ export default function Questionnaire() {
   return (
     <div
       style={{
-       backgroundImage:url('/background.jpg'),
+       backgroundImage: "url(/images/background.jpg)",
         minHeight: "100vh",
         padding: "40px 0",
       }}
