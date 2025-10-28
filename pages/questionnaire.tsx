@@ -64,7 +64,7 @@ export default function Questionnaire() {
   return (
     <div
       style={{
-        backgroundColor: "#e3f2fd", // 
+        backgroundColor: "#603C1C", // 
         minHeight: "100vh",
         padding: "40px 0",
       }}
