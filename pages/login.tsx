@@ -34,7 +34,11 @@ export default function Login() {
 
       if (res.ok) {
         alert("Login successful!");
-        router.push("/dashboard"); // Redirect after login
+        if (form.email === "tiruworkkassa@gmail.com") {
+          router.push("/report"); // Redirect special user
+        } else {
+          router.push("/dashboard"); // Redirect other users
+        }
       } else {
         alert(data.message || "Login failed");
       }
@@ -69,12 +73,7 @@ export default function Login() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "25px" }}>
-          <Image
-            src="/images/logo.jpg"
-            alt="Bank Logo"
-            width={120}
-            height={120}
-          />
+          <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
         </div>
 
         <h2
