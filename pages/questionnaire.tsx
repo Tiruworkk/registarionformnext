@@ -286,7 +286,7 @@ export default function Questionnaire() {
           style={{
             width: "100%",
             padding: "12px",
-            backgroundColor: "#F0B923",
+            backgroundColor: "#8A4D1F",
             color: "#fff",
             marginTop: "20px",
             border: "none",
