@@ -94,21 +94,18 @@ export default function Questionnaire() {
             </strong>
           </label>
           <div style={{ marginLeft: "20px" }}>
-            {["Videos", "Tips", "Simulations", "Workshops", "Other"].map(
-              (opt) => (
-                <label key={opt} style={{ display: "block", margin: "4px 0" }}>
-                  <input
-                    type="checkbox"
-                    value={opt}
-                    checked={form.awareness_content.includes(opt)}
-                    onChange={handleChange}
-                   required={index === 0 && form.awareness_content.length === 0} 
-                    
-                  />{" "}
-                  {opt}
-                </label>
-              )
-            )}
+          {["Videos", "Tips", "Simulations", "Workshops", "Other"].map((opt, index) => (
+  <label key={opt} style={{ display: "block", margin: "4px 0" }}>
+    <input
+      type="checkbox"
+      value={opt}
+      checked={form.awareness_content.includes(opt)}
+      onChange={handleChange}
+      required={index === 0 && form.awareness_content.length === 0} 
+    />{" "}
+    {opt}
+  </label>
+))}
           </div>
         </div>
 
