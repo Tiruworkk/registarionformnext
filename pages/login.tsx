@@ -1,3 +1,4 @@
+// pages/login.tsx
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -33,12 +34,12 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
+        // Save email for report page
+        localStorage.setItem("email", form.email.trim().toLowerCase());
+
         alert("Login successful!");
-        if (form.email === "tiruworkkassa@gmail.com") {
-          router.push("/report"); // Redirect special user
-        } else {
-          router.push("/dashboard"); // Redirect other users
-        }
+        // Redirect to report page
+        router.push("/report");
       } else {
         alert(data.message || "Login failed");
       }
@@ -51,16 +52,14 @@ export default function Login() {
   return (
     <div
       style={{
-      minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundImage: "url('/images/background.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed", 
-    padding: "20px",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: "url('/images/background.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        padding: "20px",
       }}
     >
       <div
@@ -75,13 +74,12 @@ export default function Login() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "25px" }}>
-        <Image
-        src="/images/logo.png"
-        alt="Bank Logo"
-        width={120}
-        height={120}
-        style={{ marginBottom: "30px" }}
-      />
+          <Image
+            src="/images/logo.png"
+            alt="Bank Logo"
+            width={120}
+            height={120}
+          />
         </div>
 
         <h2
