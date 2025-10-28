@@ -122,6 +122,7 @@ export default function Register() {
             <option>Deputy Chief</option>
             <option>Director</option>
             <option>Executive</option>
+            <option>Division</option>
           </select>
           <input
             type="email"
