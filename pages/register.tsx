@@ -43,7 +43,6 @@ export default function Register() {
       if (res.ok) {
         alert(data.message);
 
-        // ✅ Save a flag so the questionnaire page knows this user registered
         localStorage.setItem("registered", "true");
 
         router.push("/questionnaire");
@@ -59,7 +58,7 @@ export default function Register() {
   return (
     <div
       style={{
-    minHeight: "100vh",
+       minHeight: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
