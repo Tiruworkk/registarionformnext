@@ -78,13 +78,13 @@ export default function Questionnaire() {
       <form
         onSubmit={handleSubmit}
         style={{
-          maxWidth: 600,
-          margin: "0 auto",
-          padding: "20px",
-          backgroundColor: "#F0B923", 
-          borderRadius: "10px",
+          maxWidth: 500,
+          width: "100%",
+          padding: "40px",
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          borderRadius: "15px",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
           borderTop: "5px solid #F0B923",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
         }}
       >
         <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
