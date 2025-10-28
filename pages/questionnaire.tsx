@@ -42,7 +42,7 @@ export default function Questionnaire() {
       setForm({ ...form, [name]: value });
     }
   };
-
+ 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const userId = 1; // TODO: replace with actual logged-in user ID
