@@ -1,4 +1,6 @@
+// /pages/questionnaire.tsx
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/router";
 
 interface QuestionnaireData {
   awareness_content: string[];
@@ -11,9 +13,10 @@ interface QuestionnaireData {
   email_reaction: string;
   verify_financial_request: string;
   review_frequency: string;
-} 
+}
 
 export default function Questionnaire() {
+  const router = useRouter(); // for redirect
   const [form, setForm] = useState<QuestionnaireData>({
     awareness_content: [],
     experience: "",
@@ -28,9 +31,7 @@ export default function Questionnaire() {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
 
@@ -51,20 +52,32 @@ export default function Questionnaire() {
     e.preventDefault();
     const userId = 1; // TODO: replace with actual logged-in user ID
 
-    const res = await fetch("/api/submitQuestionnaire", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, user_id: userId }),
-    });
+    try {
+      const res = await fetch("/api/submitQuestionnaire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, user_id: userId }),
+      });
 
-    const data = await res.json();
-    alert(data.message);
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message);
+        localStorage.setItem("registered", "true"); // optional
+        router.push("/login"); // Redirect to login page
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit questionnaire");
+    }
   };
 
   return (
     <div
       style={{
-       minHeight: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -95,23 +108,22 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              1. What kind of cybersecurity awareness content would be most
-              useful for you?
+              1. What kind of cybersecurity awareness content would be most useful for you?
             </strong>
           </label>
           <div style={{ marginLeft: "20px" }}>
-          {["Videos", "Tips", "Simulations", "Workshops", "Other"].map((opt, index) => (
-  <label key={opt} style={{ display: "block", margin: "4px 0" }}>
-    <input
-      type="checkbox"
-      value={opt}
-      checked={form.awareness_content.includes(opt)}
-      onChange={handleChange}
-      required
-    />{" "}
-    {opt}
-  </label>
-))}
+            {["Videos", "Tips", "Simulations", "Workshops", "Other"].map((opt) => (
+              <label key={opt} style={{ display: "block", margin: "4px 0" }}>
+                <input
+                  type="checkbox"
+                  value={opt}
+                  checked={form.awareness_content.includes(opt)}
+                  onChange={handleChange}
+                  required
+                />{" "}
+                {opt}
+              </label>
+            ))}
           </div>
         </div>
 
@@ -119,8 +131,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              2. What was your experience regarding cybersecurity in your
-              previous roles?
+              2. What was your experience regarding cybersecurity in your previous roles?
             </strong>
           </label>
           <textarea
@@ -128,24 +139,24 @@ export default function Questionnaire() {
             value={form.experience}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
-            placeholder="your experience "
-           required   />
+            placeholder="your experience"
+            required
+          />
         </div>
 
         {/* 3. Breach experience */}
         <div>
           <label>
             <strong>
-              3. Have you ever faced or witnessed any cybersecurity breach,
-              attack, or data loss in your department or company?
+              3. Have you ever faced or witnessed any cybersecurity breach, attack, or data loss in your department or company?
             </strong>
           </label>
           <textarea
             name="breach_experience"
             value={form.breach_experience}
             onChange={handleChange}
-                required
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+            required
           />
         </div>
 
@@ -153,8 +164,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              4. In your opinion, what is the biggest cybersecurity threat to
-              our bank today?
+              4. In your opinion, what is the biggest cybersecurity threat to our bank today?
             </strong>
           </label>
           <input
@@ -162,8 +172,8 @@ export default function Questionnaire() {
             name="biggest_threat"
             value={form.biggest_threat}
             onChange={handleChange}
-            required
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
+            required
           />
         </div>
 
@@ -171,8 +181,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              5. Have you ever reported a cybersecurity incident or suspicious
-              email?
+              5. Have you ever reported a cybersecurity incident or suspicious email?
             </strong>
           </label>
           <select
@@ -192,8 +201,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              6. Do you use multi-factor authentication (MFA) for your business
-              accounts and emails?
+              6. Do you use multi-factor authentication (MFA) for your business accounts and emails?
             </strong>
           </label>
           <select
@@ -201,7 +209,8 @@ export default function Questionnaire() {
             value={form.mfa_used}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
-             required >
+            required
+          >
             <option value="">Select</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
@@ -212,8 +221,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              7. Do you access corporate email or data from personal devices
-              (phones, laptops, tablets)?
+              7. Do you access corporate email or data from personal devices (phones, laptops, tablets)?
             </strong>
           </label>
           <select
@@ -233,8 +241,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              8. When you receive an unexpected email with an attachment or
-              link, what’s your first reaction? Who would you contact first?
+              8. When you receive an unexpected email with an attachment or link, what’s your first reaction? Who would you contact first?
             </strong>
           </label>
           <textarea
@@ -250,8 +257,7 @@ export default function Questionnaire() {
         <div>
           <label>
             <strong>
-              9. How do you usually verify the authenticity of urgent financial
-              requests received by email or phone?
+              9. How do you usually verify the authenticity of urgent financial requests received by email or phone?
             </strong>
           </label>
           <textarea
@@ -275,7 +281,7 @@ export default function Questionnaire() {
             value={form.review_frequency}
             onChange={handleChange}
             style={{ width: "100%", padding: "8px", margin: "6px 0" }}
-                required
+            required
           >
             <option value="Never">Never</option>
             <option value="Once a year">Once a year</option>
