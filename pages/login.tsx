@@ -73,7 +73,13 @@ export default function Login() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "25px" }}>
-         <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
+        <Image
+        src="/images/logo.png"
+        alt="Bank Logo"
+        width={120}
+        height={120}
+        style={{ marginBottom: "30px" }}
+      />
         </div>
 
         <h2
