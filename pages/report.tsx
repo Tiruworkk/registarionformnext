@@ -33,7 +33,7 @@ export default function ReportPage() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundImage: "url('/images/download.jpg')",
+        backgroundImage: "url('/images/background1.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         padding: "20px",
