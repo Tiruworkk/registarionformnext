@@ -95,15 +95,15 @@ export default function Register() {
             <select name="job_title" value={form.job_title} onChange={handleChange} required
               style={{ width:"100%", padding:"12px", marginBottom:"15px", borderRadius:"8px", border:"2px solid #F0B923" }}
             >
-              <option value="" disabled hidden>Select Role</option>
-              <option>Chief</option>
-              <option>CEO</option>
-              <option>CIO</option>
-              <option>Deputy Chief</option>
-              <option>Director</option>
-              <option>Executive</option>
-              <option>Division</option>
-            </select>
+             <option value="" disabled hidden>Select Role</option>
+         <option value="Chief">Chief</option>
+           <option value="CEO">CEO</option>
+            <option value="CIO">CIO</option>
+            <option value="Deputy Chief">Deputy Chief</option>
+            <option value="Director">Director</option>
+             <option value="Executive">Executive</option>
+               <option value="Division">Division</option>
+          </select>
             <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required
               style={{ width:"100%", padding:"12px", marginBottom:"15px", borderRadius:"8px", border:"2px solid #F0B923" }}
             />

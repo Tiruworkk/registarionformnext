@@ -17,6 +17,7 @@ export default function handler(
   // Handle POST requests (for submitting a report)
   if (req.method === "POST") {
     const reportData = req.body;
+    
 
     // Example: validate and process data
     if (!reportData || !reportData.user || !reportData.issue) {
