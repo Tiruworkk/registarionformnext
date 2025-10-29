@@ -1,32 +1,19 @@
-// pages/api/getQuestionnaire.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
-import oracledb from 'oracledb';
+import type { NextApiRequest, NextApiResponse } from "next";
+import clientPromise from "../../lib/mongodb";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { userId } = req.query;
-
-  if (!userId) return res.status(400).json({ message: 'Missing userId' });
-
-  let connection;
-
   try {
-    connection = await oracledb.getConnection({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      connectString: process.env.DB_CONNECT,
-    });
+    const client = await clientPromise;
+    const db = client.db("registration_db");
 
-    const result = await connection.execute(
-      `SELECT QUESTION_ID, ANSWER FROM QUESTIONNAIRE_ANSWERS WHERE USER_ID = :userId`,
-      { userId: Number(userId) }
-    );
+    const questionnaires = await db.collection("questionnaires").find({}).toArray();
 
-    res.status(200).json({ answers: result.rows });
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Content-Disposition", "attachment; filename=questionnaires.json");
+
+    res.status(200).send(JSON.stringify(questionnaires, null, 2));
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Database error' });
-  } finally {
-    if (connection) await connection.close();
+    res.status(500).json({ error: "Failed to fetch questionnaires." });
   }
 }
- 

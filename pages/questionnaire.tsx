@@ -1,5 +1,5 @@
 // /pages/questionnaire.tsx
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
 
 interface QuestionnaireData {
@@ -16,7 +16,7 @@ interface QuestionnaireData {
 }
 
 export default function Questionnaire() {
-  const router = useRouter(); // for redirect
+  const router = useRouter();
   const [form, setForm] = useState<QuestionnaireData>({
     awareness_content: [],
     experience: "",
@@ -29,6 +29,14 @@ export default function Questionnaire() {
     verify_financial_request: "",
     review_frequency: "Never",
   });
+
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  // Get logged-in user's email from localStorage
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    setUserEmail(email);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -50,21 +58,33 @@ export default function Questionnaire() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const userId = 1; // TODO: replace with actual logged-in user ID
+
+    if (!userEmail) {
+      alert("Email missing. Please log in first.");
+      return;
+    }
+
+    if (form.awareness_content.length === 0) {
+      alert("Please select at least one type of awareness content.");
+      return;
+    }
 
     try {
       const res = await fetch("/api/submitQuestionnaire", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, user_id: userId }),
+        body: JSON.stringify({
+          email: userEmail,
+          answers: form,
+        }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         alert(data.message);
-        localStorage.setItem("registered", "true"); // optional
-        router.push("/login"); // Redirect to login page
+        localStorage.setItem("registered", "true");
+        router.push("/thank-you");
       } else {
         alert(data.message);
       }
@@ -112,14 +132,14 @@ export default function Questionnaire() {
             </strong>
           </label>
           <div style={{ marginLeft: "20px" }}>
-            {["Videos", "Tips", "Simulations", "Workshops", "Other"].map((opt) => (
+            {["Videos", "Tips", "Simulations", "Workshops", "Other"].map((opt, index) => (
               <label key={opt} style={{ display: "block", margin: "4px 0" }}>
                 <input
                   type="checkbox"
                   value={opt}
                   checked={form.awareness_content.includes(opt)}
                   onChange={handleChange}
-                  required
+                  required={index === 0}
                 />{" "}
                 {opt}
               </label>
@@ -298,10 +318,12 @@ export default function Questionnaire() {
             padding: "12px",
             backgroundColor: "#8A4D1F",
             color: "#fff",
-            marginTop: "20px",
+             marginTop: "20px",
             border: "none",
             borderRadius: "6px",
             cursor: "pointer",
+            fontWeight: "bold",
+            fontSize: "16px",
           }}
         >
           Submit

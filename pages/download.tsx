@@ -1,43 +1,71 @@
+// pages/download.tsx
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import withAuth from "../components/withAuth";
 
-interface ReportData {
-  name: string;
-  job_title: string;
-  email: string;
-  createdAt: string;
-}
-
-export default function Download() {
-  const router = useRouter();
-  const { email } = router.query;
-  const [data, setData] = useState<ReportData | null>(null);
+function DownloadQuestionnaires() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!email) return;
+    if (typeof window !== "undefined") {
+      const email = localStorage.getItem("email");
+      setUserEmail(email);
+    }
+  }, []);
 
-    fetch(`/api/report?email=${email}`)
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(err => console.error(err));
-  }, [email]);
-
-  if (!data) return <p>Loading report...</p>;
+  // Access control: Only admin can see download
+  if (userEmail !== "tiruworkkassa@gmail.com") {
+    return (
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "80px",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
+        <h1 style={{ color: "#d9534f" }}>Access Denied</h1>
+        <p>You do not have permission to download questionnaire data.</p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1>Report</h1>
-      <p>Name: {data.name}</p>
-      <p>Job Title: {data.job_title}</p>
-      <p>Email: {data.email}</p>
-      <p>Registered At: {new Date(data.createdAt).toLocaleString()}</p>
+    <div
+      style={{
+        textAlign: "center",
+        marginTop: "80px",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <h1>📊 Download Questionnaire Data</h1>
+      <p style={{ color: "#444", marginBottom: "30px" }}>
+        Click below to download all questionnaire responses as an Excel file.
+      </p>
+
       <a
-        href={`/api/report?email=${email}`}
-        download={`report_${data.name}.json`}
+        href="/api/downloadAll"
+        style={{
+          padding: "12px 24px",
+          backgroundColor: "#0070f3",
+          color: "white",
+          borderRadius: "6px",
+          textDecoration: "none",
+          fontWeight: "bold",
+          fontSize: "16px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+          transition: "all 0.3s ease",
+          display: "inline-block",
+        }}
+        onMouseEnter={(e) =>
+          ((e.target as HTMLAnchorElement).style.backgroundColor = "#0059c1")
+        }
+        onMouseLeave={(e) =>
+          ((e.target as HTMLAnchorElement).style.backgroundColor = "#0070f3")
+        }
       >
-        Download Report
+        ⬇️ Download Excel
       </a>
     </div>
   );
 }
- 
+
+export default withAuth(DownloadQuestionnaires);

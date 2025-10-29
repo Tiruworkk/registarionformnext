@@ -42,10 +42,7 @@ export default function Register() {
       const data = await res.json();
       if (res.ok) {
         alert(data.message);
-
-        localStorage.setItem("registered", "true");
-
-        router.push("/questionnaire");
+        router.push("/login");
       } else {
         alert(data.message);
       }
@@ -56,146 +53,73 @@ export default function Register() {
   };
 
   return (
-    <div
-      style={{
-       minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundImage: "url('/images/background.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed", 
-    padding: "20px",
-      }}
-    >
-      <div
-        style={{
+    <>
+      {/* Global CSS to prevent scrolling */}
+      <style>{`
+        html, body {
+          height: 100%;
+          margin: 0;
+          overflow: hidden; /* prevents scrolling */
+        }
+      `}</style>
+
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: "url('/images/background.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        padding: "20px"
+      }}>
+        <div style={{
           maxWidth: 500,
           width: "100%",
           padding: "40px",
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          backgroundColor: "rgba(255,255,255,0.95)",
           borderRadius: "15px",
           boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-          borderTop: "5px solid #F0B923",
-        }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "25px" }}>
-          <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
+          borderTop: "5px solid #F0B923"
+        }}>
+          <div style={{ textAlign: "center", marginBottom: "25px" }}>
+            <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
+          </div>
+
+          <h2 style={{ textAlign: "center", color: "#603C1C" }}>Registration Form</h2>
+
+          <form onSubmit={handleSubmit}>
+            <input type="text" name="name" placeholder="Full Name" value={form.name} onChange={handleChange} required
+              style={{ width:"100%", padding:"12px", marginBottom:"15px", borderRadius:"8px", border:"2px solid #F0B923" }}
+            />
+            <select name="job_title" value={form.job_title} onChange={handleChange} required
+              style={{ width:"100%", padding:"12px", marginBottom:"15px", borderRadius:"8px", border:"2px solid #F0B923" }}
+            >
+              <option value="" disabled hidden>Select Role</option>
+              <option>Chief</option>
+              <option>CEO</option>
+              <option>CIO</option>
+              <option>Deputy Chief</option>
+              <option>Director</option>
+              <option>Executive</option>
+              <option>Division</option>
+            </select>
+            <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required
+              style={{ width:"100%", padding:"12px", marginBottom:"15px", borderRadius:"8px", border:"2px solid #F0B923" }}
+            />
+            <input type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required
+              style={{ width:"100%", padding:"12px", marginBottom:"15px", borderRadius:"8px", border:"2px solid #F0B923" }}
+            />
+            <input type="password" name="retypePassword" placeholder="Retype Password" value={form.retypePassword} onChange={handleChange} required
+              style={{ width:"100%", padding:"12px", marginBottom:"25px", borderRadius:"8px", border:"2px solid #F0B923" }}
+            />
+
+            <button type="submit" style={{
+              width:"100%", padding:"14px", backgroundColor:"#F0B923", color:"#603C1C", fontWeight:700, border:"none", borderRadius:"10px", cursor:"pointer"
+            }}>Register</button>
+          </form>
         </div>
-
-        <h2 style={{ textAlign: "center", color: "#603C1C" }}>
-          Registration Form
-        </h2>
-
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <select
-            name="job_title"
-            value={form.job_title}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          >
-            <option value="" disabled hidden>
-              Select Role
-            </option>
-            <option>Chief</option>
-            <option>CEO</option>
-            <option>CIO</option>
-            <option>Deputy Chief</option>
-            <option>Director</option>
-            <option>Executive</option>
-            <option>Division</option>
-          </select>
-
-          <input
-            type="email"
-            name="email"
-            placeholder="test@gmail.com"
-            value={form.email}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "15px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <input
-            type="password"
-            name="retypePassword"
-            placeholder="Retype your password"
-            value={form.retypePassword}
-            onChange={handleChange}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              marginBottom: "25px",
-              borderRadius: "8px",
-              border: "2px solid #F0B923",
-            }}
-          />
-
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "14px",
-              backgroundColor: "#F0B923",
-              color: "#603C1C",
-              fontWeight: "700",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-            }}
-          >
-            Register
-          </button>
-        </form>
       </div>
-    </div>
+    </>
   );
 }
