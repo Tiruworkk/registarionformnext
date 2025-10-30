@@ -52,14 +52,6 @@ export default function Login() {
 
   return (
     <>
-      {/* Global CSS to prevent scrolling and fix background */}
-      <style>{`
-        html, body {
-          height: 100%;
-          margin: 0;
-          overflow: hidden; /* prevents scrolling */
-        }
-      `}</style>
 
       <div
         style={{
