@@ -54,16 +54,8 @@ export default function Register() {
 
   return (
     <>
-      {/* Global CSS to prevent scrolling */}
-      <style>{`
-        html, body {
-          height: 100%;
-          margin: 0;
-          overflow: hidden; /* prevents scrolling */
-        }
-      `}</style>
-
-      <div style={{
+      
+  <div style={{
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
