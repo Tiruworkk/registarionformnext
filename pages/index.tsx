@@ -36,7 +36,7 @@ export default function Home() {
       if (res.ok) {
         alert("Login successful!");
         setShowLogin(false); // hide modal
-        if (form.email === "tiruworkkassa@gmail.com") {
+        if (form.email ==="maru.dagne34@gmail.com") {
           router.push("/report");
         } else {
           router.push("/dashboard");

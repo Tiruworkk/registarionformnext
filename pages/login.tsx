@@ -1,17 +1,17 @@
-import { useState, FormEvent } from "react";
-import { useRouter } from "next/router";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface LoginForm {
   email: string;
   password: string;
 }
 
-export default function Login() {
+export default function Home() {
   const router = useRouter();
   const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -33,13 +33,15 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("email", form.email.trim().toLowerCase());
-        alert("Login successful!");
+        // Save email in localStorage
+        const emailFromApi = data.email?.toLowerCase() || form.email.toLowerCase();
+        localStorage.setItem("email", emailFromApi);
 
-        if (form.email.trim().toLowerCase() === "tiruworkkassa@gmail.com") {
-          router.push("/report"); // Admin
+        // Redirect based on email
+        if (emailFromApi === "maru.dagne34@gmail.com") {
+          router.push("/report"); // Admin goes to report page
         } else {
-          router.push("/questionnaire"); // Normal user
+          router.push("/questionnaire"); // Normal users
         }
       } else {
         alert(data.message || "Login failed");
@@ -51,120 +53,122 @@ export default function Login() {
   };
 
   return (
-    <>
-
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: "url('/images/background.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+        padding: "20px",
+      }}
+    >
       <div
         style={{
-          minHeight: "100vh",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundImage: "url('/images/background.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          padding: "20px",
+          width: 400,
+          padding: "40px",
+          backgroundColor: "white",
+          borderRadius: "15px",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+          borderTop: "5px solid #F0B923",
         }}
       >
-        <div
+        <div style={{ textAlign: "center", marginBottom: "25px" }}>
+          <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
+        </div>
+
+        <h2
           style={{
-            maxWidth: 400,
-            width: "100%",
-            padding: "40px",
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            borderRadius: "15px",
-            boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-            borderTop: "5px solid #F0B923",
+            textAlign: "center",
+            marginBottom: "30px",
+            color: "#603C1C",
+            fontWeight: 700,
+            fontSize: "1.8rem",
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "25px" }}>
-            <Image src="/images/logo.png" alt="Bank Logo" width={120} height={120} />
-          </div>
+          Login
+        </h2>
 
-          <h2
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email address"
+            value={form.email}
+            onChange={handleChange}
+            required
             style={{
-              textAlign: "center",
-              marginBottom: "30px",
+              width: "100%",
+              padding: "12px",
+              marginBottom: "15px",
+              borderRadius: "8px",
+              border: "2px solid #F0B923",
+              outline: "none",
+              fontSize: "1rem",
+            }}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginBottom: "25px",
+              borderRadius: "8px",
+              border: "2px solid #F0B923",
+              outline: "none",
+              fontSize: "1rem",
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "14px",
+              backgroundColor: "#F0B923",
               color: "#603C1C",
               fontWeight: 700,
-              fontSize: "1.8rem",
+              fontSize: "1.1rem",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              transition: "0.3s",
             }}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#e6aa1f")}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#F0B923")}
           >
             Login
-          </h2>
+          </button>
+        </form>
 
-          <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email address"
-              value={form.email}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginBottom: "15px",
-                borderRadius: "8px",
-                border: "2px solid #F0B923",
-              }}
-            />
-
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginBottom: "25px",
-                borderRadius: "8px",
-                border: "2px solid #F0B923",
-              }}
-            />
-
-            <button
-              type="submit"
-              style={{
-                width: "100%",
-                padding: "14px",
-                backgroundColor: "#F0B923",
-                color: "#603C1C",
-                fontWeight: 700,
-                border: "none",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
-              Login
-            </button>
-          </form>
-
-          <p
+        <p
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+            fontSize: "0.9rem",
+          }}
+        >
+          Don't have an account?{" "}
+          <a
+            href="/register"
             style={{
-              textAlign: "center",
-              marginTop: "20px",
-              fontSize: "0.9rem",
+              color: "#F0B923",
+              fontWeight: "bold",
+              textDecoration: "none",
             }}
           >
-            Don’t have an account?{" "}
-            <a
-              href="/register"
-              style={{
-                color: "#F0B923",
-                fontWeight: "bold",
-                textDecoration: "none",
-              }}
-            >
-              Register
-            </a>
-          </p>
-        </div>
+            Register
+          </a>
+        </p>
       </div>
-    </>
+    </div>
   );
 }

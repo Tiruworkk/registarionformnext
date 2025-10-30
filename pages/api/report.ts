@@ -1,60 +1,52 @@
-// pages/api/report.ts
-
 import type { NextApiRequest, NextApiResponse } from "next";
+import clientPromise from "../../lib/mongodb";
 
-// Define the structure of the response data
-interface ReportResponse {
-  success: boolean;
-  message: string;
-  data?: any;
+interface LoginRequest {
+  email: string;
+  password: string;
 }
 
-// Main API handler
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ReportResponse>
-) {
-  // Handle POST requests (for submitting a report)
-  if (req.method === "POST") {
-    const reportData = req.body;
-    
+interface LoginResponse {
+  message: string;
+  email?: string;
+}
 
-    // Example: validate and process data
-    if (!reportData || !reportData.user || !reportData.issue) {
-      return res.status(400).json({
-        success: false,
-        message: "Missing required fields (user, issue).",
-      });
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<LoginResponse>
+) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+
+  const { email, password }: LoginRequest = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
+  try {
+    const client = await clientPromise;
+    const db = client.db("registration_db");
+
+    // Use lowercase for comparison
+    const user = await db
+      .collection("users")
+      .findOne({ email: email.trim().toLowerCase() });
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
     }
 
-    // Normally, you might save to a database here
-    console.log("Report received:", reportData);
+    // ✅ Password check only (email already matched in DB query)
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Email or password incorrect" });
+    }
 
-    return res.status(200).json({
-      success: true,
-      message: "Report submitted successfully.",
-      data: reportData,
-    });
+    // ✅ Return the email for frontend
+    return res.status(200).json({ message: "Login successful", email: user.email });
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-  // Handle GET requests (for fetching sample report info)
-  if (req.method === "GET") {
-    return res.status(200).json({
-      success: true,
-      message: "Report API is working fine.",
-      data: {
-        example: {
-          user: "full name",
-          issue: "Phishing email detected",
-          timestamp: new Date().toISOString(),
-        },
-      },
-    });
-  }
-
-  // Handle unsupported methods
-  return res.status(405).json({
-    success: false,
-    message: "Method not allowed. Use GET or POST.",
-  });
 }

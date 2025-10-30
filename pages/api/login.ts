@@ -8,6 +8,7 @@ interface LoginRequest {
 
 interface LoginResponse {
   message: string;
+  email?: string;
 }
 
 export default async function handler(
@@ -28,18 +29,22 @@ export default async function handler(
     const client = await clientPromise;
     const db = client.db("registration_db");
 
-    const user = await db.collection("users").findOne({ email: email.trim().toLowerCase() });
+    // Use lowercase for comparison
+    const user = await db
+      .collection("users")
+      .findOne({ email: email.trim().toLowerCase() });
 
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    // Simple password check (replace with hashed password in production)
-    if (user.password !== password ||user.email !==email) {
-      return res.status(401).json({ message: "your email and password are Incorrect " });
+    // ✅ Password check only (email already matched in DB query)
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Email or password incorrect" });
     }
 
-    return res.status(200).json({ message: "Login successful" });
+    // ✅ Return the email for frontend
+    return res.status(200).json({ message: "Login successful", email: user.email });
   } catch (err) {
     console.error("Login error:", err);
     return res.status(500).json({ message: "Internal server error" });

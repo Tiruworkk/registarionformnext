@@ -1,35 +1,34 @@
-// components/withAuth.tsx
 import { useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/router";
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export default function withAuth(Component: any) {
   return function AuthWrapper(props: Props) {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [redirectMessage, setRedirectMessage] = useState("");
+    const [userEmail, setUserEmail] = useState<string | null>(null);
 
     useEffect(() => {
-      const email = localStorage.getItem("email");
+      // Run only on client
+      if (typeof window !== "undefined") {
+        const email = localStorage.getItem("email");
 
-      if (!email) {
-        setRedirectMessage("Please login first to access this page...");
-        // Redirect after a short delay so user can see the message
-        setTimeout(() => {
+        if (!email) {
+          // User not logged in → redirect
           router.replace("/login");
-        }, 2000);
-      } else {
-        setLoading(false);
+        } else {
+          setUserEmail(email);
+        }
+
+        setLoading(false); // Finished checking
       }
-    }, []);
+    }, [router]);
 
-    if (loading) return <Component {...props} />;
-
-    // Show message if user not logged in
-    if (redirectMessage) {
+    // While checking auth, show loading
+    if (loading) {
       return (
         <div
           style={{
@@ -37,17 +36,20 @@ export default function withAuth(Component: any) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#f8f8f8",
-            fontSize: "18px",
+            fontSize: 18,
             fontWeight: "bold",
             color: "#333",
           }}
         >
-          {redirectMessage}
+          Checking authentication...
         </div>
       );
     }
 
+    // If user not logged in, render nothing (redirect handled)
+    if (!userEmail) return null;
+
+    // User is logged in → render wrapped component
     return <Component {...props} />;
   };
 }
