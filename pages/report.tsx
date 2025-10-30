@@ -83,7 +83,7 @@ function Report() {
     >
       <div
         style={{
-          maxWidth: "900px",
+          maxWidth: "900px", 
           margin: "0 auto",
           backgroundColor: "rgba(255, 255, 255, 0.95)",
           borderRadius: "15px",
